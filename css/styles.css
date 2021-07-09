@@ -10749,10 +10749,29 @@ header.masthead .post-heading .meta {
 header.masthead .post-heading .meta a {
   color: #fff;
 }
+
+header.mastheadpost{
+  position: relative;
+  margin-bottom: 3rem;
+  padding-top: calc(8rem + 57px);
+  padding-bottom: 8rem;
+  background: no-repeat center center;
+
+  background-size: cover;
+  background-attachment: scroll;
+ 
+  background-color: #000000;
+  opacity: 0.2;
+
+}
 @media (min-width: 992px) {
   header.masthead {
     padding-top: 12.5rem;
     padding-bottom: 12.5rem;
+  }
+  header.mastheadpost {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
   }
   header.masthead .page-heading h1, header.masthead .page-heading .h1,
 header.masthead .site-heading h1,
