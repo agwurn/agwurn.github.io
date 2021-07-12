@@ -1,0 +1,10 @@
+@charset "UTF-8";
+body{
+    background-color: rgb(245, 239, 233);
+}
+h1{
+    color: cadetblue;
+}
+p{
+    font-size: 20px;
+}
