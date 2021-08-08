@@ -10761,7 +10761,7 @@ header.mastheadpost{
   background-attachment: scroll;
  
   background-color: #000000;
-  opacity: 0.2;
+  opacity: 0.2; 
 
 }
 @media (min-width: 992px) {
