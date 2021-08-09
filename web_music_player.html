@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ㄍㄨㄣ網頁版吉他音箱</title>
+    <script src="musicplayer.js" defer></script>
+    <script src="input-knobs-master/input-knobs.js"></script>
+    <style>
+        body { 
+            background-color: #DBDBDB;}
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vw;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .grid{
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            justify-content: center;
+            justify-items: center;
+            align-items: center;
+            gap: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <audio id ="audio1" controls src="Agwurn-HeartBeat.mp3"></audio>
+    <button onclick="playAudio();">播放</button>
+    <canvas id="visualizer"></canvas>
+    <!-- <div class="grid">
+        <input type="range" min="0" max="1" value=".5" step=".01" id="volume" class="input-knob" data-diameter="120" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="bass" class="input-knob" data-diameter="120" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="mid" class="input-knob" data-diameter="120" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="treble" class="input-knob" data-diameter="120" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+
+        <label for="volume">Volume 總音量</label>
+        <label for="bass">Bass 低頻</label>
+        <label for="mid">Mid 中頻</label>
+        <label for="treble">Treble 高頻</label>
+    </div> -->
+    
+</body>
+</html>
