@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ㄍㄨㄣ線上吉他音箱</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <script src="web_guitaramp_script.js" defer></script>
+    <script src="input-knobs-master/input-knobs.js"></script>
+    <style>
+        body { 
+            background-color: #DBDBDB;}
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vw;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .grid{
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto auto auto auto;
+            justify-content: center;
+            justify-items: center;
+            align-items: center;
+            gap: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="visualizer"></canvas>
+    <div class="grid">
+        <input type="range" min="0" max="10" value=".5" step=".01" id="drive" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="0" max="1" value=".5" step=".01" id="volume" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="bass" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="mid" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-10" max="10" value="0" id="treble" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="-80" max="0" value="0" id="threshold" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="1" max="20" value="0" id="ratio" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="0" max="1" value="0" step=".001" id="attack" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+        <input type="range" min="0" max="1" value="0" step=".001" id="release" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100">
+
+        <label for="drive">Drive 破音</label>
+        <label for="volume">Volume 總音量</label>
+        <label for="bass">Bass 低頻</label>
+        <label for="mid">Mid 中頻</label>
+        <label for="treble">Treble 高頻</label>
+        <label for="threshold">Threshold 閥值</label>
+        <label for="ratio">Ratio 壓縮比</label>
+        <label for="attack">Attack 壓縮啟動時間</label>
+        <label for="release">Release 壓縮釋放時間</label>
+
+        <!-- <button id="drive_toggle">破音開關</button>
+        <button id="ampsim_toggle">音箱模擬開關</button> -->
+        <input id="overdrive_toggle" type="checkbox" onclick="overdrive_on()" class="input-switch" data-src="input-knobs-master/images/switch_offon.png" data-diameter="50"/>
+
+        <input id="mono_stereo_toggle" type="checkbox" onclick="toStereo()" class="input-switch" data-src="input-knobs-master/images/switch_offon.png" data-diameter="50"/>
+        <label for="mono_stereo_toggle">單聲道/立體聲</label>
+        
+
+        <!-- <input type="range" min="0" max="20" value="0.5" step=".01" id="pan" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100"> -->
+        <!-- <input type="range" min="-1" max="1" value=".0" step=".001" id="pan" class="input-knob" data-diameter="60" data-src="input-knobs-master/images/knob70.png" data-sprites="100"> -->
+
+
+        <!-- <button id="comp">Comp</button> -->
+    </div>
+    
+</body>
+</html>
