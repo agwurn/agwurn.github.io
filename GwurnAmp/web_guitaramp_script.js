@@ -15,6 +15,7 @@ const ratio = document.getElementById('ratio');
 const attack = document.getElementById('attack');
 const release = document.getElementById('release');
 
+const reverbWetDry = document.getElementById('reverbWetDry');
 
 const visualizer = document.getElementById('visualizer');
 const fftsize = 2048;
@@ -43,6 +44,11 @@ var gainOverdriveWet = audioCtx.createGain();
 var gainOverdriveDry = audioCtx.createGain();
 const gainOverdriveWetNode = new GainNode(audioCtx, {gain: 0})
 const gainOverdriveDryNode = new GainNode(audioCtx, {gain: volume.value})
+
+var reverbWet = audioCtx.createGain();
+var reverbDry = audioCtx.createGain();
+const reverbWetNode = new GainNode(audioCtx, {gain: volume.value})
+const reverbDryNode = new GainNode(audioCtx, {gain: volume.value})
 
 
 // start alert
@@ -91,10 +97,10 @@ const getImpulseBuffer = (audioCtx, impulseUrl) => {
 }
 
 const convolver = audioCtx.createConvolver()
-async function init(){
+async function ampSimInit(){
     convolver.buffer = await getImpulseBuffer(audioCtx, 'amp-ir-pack/ir_test.wav')
 }
-init()
+ampSimInit()
 
 
 //------Effects
@@ -206,9 +212,45 @@ function setupEventListeners(){
         const value = parseInt(e.target.value) // to get the value from gui
         compressor.release.setTargetAtTime(value, audioCtx.currentTime,.01) // this can smooth the signal when changing volume
     })
+
+    reverbWetDry.addEventListener('input', e => {
+        const value = parseFloat(e.target.value) // to get the value from gui
+
+        reverbWetNode.gain.setTargetAtTime(value, audioCtx.currentTime,.01) // this can smooth the signal when changing volume
+        reverbDryNode.gain.setTargetAtTime(1-value, audioCtx.currentTime,.01) // this can smooth the signal when changing volume
+        // console.log(reverbWetNode.gain.value)
+        // console.log(reverbDryNode.gain.value)
+    })
     
     
 }
+
+//------Reverb
+const reverbConvolver = audioCtx.createConvolver()
+async function reverbInit(reverbFile){
+    reverbConvolver.buffer = await getImpulseBuffer(audioCtx, reverbFile)
+}
+reverbInit('reverb-ir-file/Nice Drum Room.wav')
+
+function selectReverb(selectObject) {
+    var value = selectObject.value;  
+
+    if (value=="room"){
+        console.log(value);
+        reverbInit('reverb-ir-file/Nice Drum Room.wav')
+    }
+    else if (value=="spring"){
+        console.log(value);
+        reverbInit('reverb-ir-file/Conic Long Echo Hall.wav')
+    }
+    else if (value=="hall"){
+        console.log(value);
+        reverbInit('reverb-ir-file/Nice Drum Room.wav')
+    }
+}
+
+
+
 
 //------Audio route
 async function setupContext(){
@@ -259,8 +301,14 @@ async function setupContext(){
         .connect(compressor)
         
         .connect(analyserNode)
-    
 
+    //reverb
+    analyserNode.connect(reverbConvolver).connect(reverbWetNode)
+    analyserNode.connect(reverbDryNode)
+    
+    
+    reverbWetNode.connect(audioCtx.destination)
+    reverbDryNode
         .connect(audioCtx.destination) //destination = speaker of ur computer , often be the last node to connect!
 
 }
