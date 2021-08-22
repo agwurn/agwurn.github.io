@@ -1,8 +1,20 @@
+// The route :
+// Channel Selector
+// Overdrive
+// Distortion
+// Amp
+// AmpSim(Cab)
+// Chorus
+// Reverb
+// Delay
+// Tremolo
+
 const pan = document.getElementById('pan');
 const mono_stereo_toggle = document.getElementById('mono_stereo_toggle')
 const overdrive_toggle = document.getElementById('overdrive_toggle')
 
 // console.log(mono_stereo_toggle)
+const driveAmountKnob = document.getElementById('driveAmount');
 const driveKnob = document.getElementById('drive');
 const volume = document.getElementById('volume');
 
@@ -19,6 +31,7 @@ const reverbWetDry = document.getElementById('reverbWetDry');
 
 const visualizer = document.getElementById('visualizer');
 const fftsize = 2048;
+
 
 const audioCtx = new AudioContext()
 
@@ -50,6 +63,14 @@ var reverbDry = audioCtx.createGain();
 const reverbWetNode = new GainNode(audioCtx, {gain: volume.value})
 const reverbDryNode = new GainNode(audioCtx, {gain: volume.value})
 
+const oscTremolo = audioCtx.createOscillator();
+oscTremolo.frequency.value = 2;
+const TremoloAmpDepth = audioCtx.createGain();
+TremoloAmpDepth.gain = 0.001; 
+const TremoloNode = audioCtx.createGain();
+oscTremolo.connect(TremoloAmpDepth);
+TremoloAmpDepth.connect(TremoloNode);
+oscTremolo.start(0);
 
 // start alert
 alert('小心！如果直接進入會大聲feedback，請設定你電腦的輸入為你的錄音介面')
@@ -107,14 +128,23 @@ ampSimInit()
 
 function makeDistortionCurve(amount) {
     let k = typeof amount === 'number' ? amount : 50,
-      n_samples = 44100,
+    //   n_samples = 44100,
+      n_samples = 256,
       curve = new Float32Array(n_samples),
       deg = Math.PI / 180,
       i = 0,
       x;
     for ( ; i < n_samples; ++i ) {
+        
       x = i * 2 / n_samples - 1;
-      curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) )
+        if(i<n_samples/2){
+            curve[i] = x;
+        }
+        else{
+            curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) )
+        }
+    // curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) )
+
     }
     return curve
 };
@@ -123,7 +153,7 @@ const driveGain = new GainNode(audioCtx, {gain: volume.value})
 
 const distortionNode = audioCtx.createWaveShaper();
 distortionNode.oversample = '4x';
-distortionNode.curve = makeDistortionCurve(400)
+distortionNode.curve = makeDistortionCurve(400);
 
 const gainNode = new GainNode(audioCtx, {gain: volume.value})
 const bassEQ = new BiquadFilterNode(audioCtx, {
@@ -168,6 +198,12 @@ function setupEventListeners(){
     //     panNode.setPosition(value,0,0);
     //     // panNode.pan.setValueAtTime(value, audioCtx.currentTime,.01);
     // })
+    driveAmountKnob.addEventListener('input', e => {
+        const value = parseFloat(e.target.value) // to get the value from gui
+        // gainNode.gain.value = value
+        
+        distortionNode.curve = makeDistortionCurve(value);    
+    })
 
     driveKnob.addEventListener('input', e => {
         const value = parseFloat(e.target.value) // to get the value from gui
@@ -307,6 +343,11 @@ async function setupContext(){
     analyserNode.connect(reverbDryNode)
     
     
+    // reverbWetNode.connect(TremoloNode)
+    // reverbDryNode.connect(TremoloNode)
+
+    // TremoloNode
+
     reverbWetNode.connect(audioCtx.destination)
     reverbDryNode
         .connect(audioCtx.destination) //destination = speaker of ur computer , often be the last node to connect!
@@ -355,4 +396,4 @@ function drawVisualizer(){
 function resize(){ // change the bar into high resolution  
     visualizer.width = visualizer.clientWidth * window.devicePixelRatio
     visualizer.height = visualizer.clientHeight * window.devicePixelRatio
-}
+} 
