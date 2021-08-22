@@ -9,7 +9,7 @@ const start = function () {
 
 	// load hrir to the container
 	var hrtfContainer = new HRTFContainer();
-	hrtfContainer.loadHrir("../hrir/kemar_L.bin");
+	hrtfContainer.loadHrir('hrir/kemar_L.bin');
 
 	// create audio source node from the <audio> element
 	var sourceNode = audioContext.createMediaElementSource(document.getElementById("player"));
